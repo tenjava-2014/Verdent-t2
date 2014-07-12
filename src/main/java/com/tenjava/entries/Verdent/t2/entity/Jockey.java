@@ -5,6 +5,7 @@
  */
 package com.tenjava.entries.Verdent.t2.entity;
 
+import java.util.UUID;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 
@@ -12,12 +13,13 @@ import org.bukkit.entity.Player;
  *
  * @author Verdent
  */
-public class Jokey {
+public class Jockey {
 
     private final Player player;
     private Horse horse;
+    private Checkpoint nextCheckPoint;
 
-    public Jokey(Player player, Horse horse) {
+    public Jockey(Player player, Horse horse) {
         this.player = player;
         this.horse = horse;
     }
@@ -32,6 +34,18 @@ public class Jokey {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Checkpoint getNextCheckPoint() {
+        return nextCheckPoint;
+    }
+
+    public RacingLap getCurrentLap() {
+        return nextCheckPoint.getLap();
+    }
+
+    public UUID getPlayerUUID() {
+        return player.getUniqueId();
     }
 
 }
