@@ -7,7 +7,7 @@ package com.tenjava.entries.Verdent.t2.boosts;
 
 /**
  *
- * @author User
+ * @author Verdent
  */
 public abstract class Boost implements IBoost {
 

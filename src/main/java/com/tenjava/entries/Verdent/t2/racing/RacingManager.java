@@ -28,6 +28,7 @@ public class RacingManager {
     private final HashMap<UUID, PowerUp> powerUps = new HashMap<UUID, PowerUp>();
     private final HashMap<UUID, Horse> horses = new HashMap<UUID, Horse>();
     private final HashMap<UUID, Jockey> jockeys = new HashMap<UUID, Jockey>();
+    private final HashMap<String, Arena> arenas = new HashMap<String, Arena>();
     private final HorseManager hm = new HorseManager();
 
     private RacingManager() {
@@ -119,6 +120,10 @@ public class RacingManager {
             return true;
         }
         return false;
+    }
+
+    public HashMap<String, Arena> getArenas() {
+        return arenas;
     }
 
 }

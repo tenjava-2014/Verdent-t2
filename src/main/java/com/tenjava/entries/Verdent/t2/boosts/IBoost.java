@@ -9,7 +9,7 @@ import com.tenjava.entries.Verdent.t2.entity.Jockey;
 
 /**
  *
- * @author User
+ * @author Verdent
  */
 public interface IBoost {
 

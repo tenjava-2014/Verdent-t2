@@ -7,7 +7,6 @@ package com.tenjava.entries.Verdent.t2.boosts;
 
 import com.tenjava.entries.Verdent.t2.TenJava;
 import com.tenjava.entries.Verdent.t2.entity.Jockey;
-import com.tenjava.entries.Verdent.t2.racing.BoostManager;
 import com.tenjava.entries.Verdent.t2.utils.HorseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Horse;
@@ -17,10 +16,10 @@ import org.bukkit.scheduler.BukkitRunnable;
  *
  * @author Verdent
  */
-public class SpeedBoost extends Boost {
+public class GreaterSpeedBoost extends Boost {
 
-    public SpeedBoost() {
-        super("Speed Boost");
+    public GreaterSpeedBoost() {
+        super("Greater Speed Boost");
     }
 
     @Override
@@ -28,14 +27,14 @@ public class SpeedBoost extends Boost {
         HorseManager hm = new HorseManager();
         Horse horse = jockey.getHorse();
         double previousValue = hm.getHorseSpeed(horse);
-        hm.setHorseSpeed(horse, previousValue * 1.5);
+        hm.setHorseSpeed(horse, previousValue * 2);
         new BukkitRunnable() {
 
             @Override
             public void run() {
                 deactivate(jockey);
             }
-        }.runTaskLater(Bukkit.getPluginManager().getPlugin(TenJava.NAME), 40);
+        }.runTaskLater(Bukkit.getPluginManager().getPlugin(TenJava.NAME), 20);
     }
 
     @Override

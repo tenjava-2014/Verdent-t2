@@ -11,7 +11,7 @@ import java.util.Random;
 
 /**
  *
- * @author User
+ * @author Verdent
  */
 public class BoostManager {
 
