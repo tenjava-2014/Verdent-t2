@@ -310,10 +310,10 @@ public class RacingCommand {
             return;
         }
         if (operator.equalsIgnoreCase("on")) {
-            rm.addSpawnEnabled(uuid, arenaName);
+            rm.addCheckpointEnabled(uuid, arenaName);
             player.sendMessage(ChatColor.GREEN + "Checkpoint creating has been enabled for arena: " + arenaName);
         } else if (operator.equalsIgnoreCase("off")) {
-            rm.removeSpawnEnabled(uuid);
+            rm.removeCheckpointEnabled(uuid);
             player.sendMessage(ChatColor.GREEN + "Checkpoint creating has been canceled");
         } else {
             player.sendMessage(ChatColor.RED + "Only on/off allowed");
