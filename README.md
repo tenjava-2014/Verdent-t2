@@ -30,7 +30,7 @@ Usage
 
 1. Insert my plugin to plugin folder on you server
 2. Then follow commands after using "/racing" commands
-3. You need to setup arena and spawn points. 
+3. You need to setup arena, spawn points and checkpoints. 
 4. There is also possible to set up Power-ups for you horse
 5. The main reason for this plugin is to be able to create horse racings with boosts and checkpoints
 6. I didnt have enough time to create arena saving but basicly the main structure of my plugin works.
