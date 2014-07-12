@@ -1,5 +1,6 @@
 package com.tenjava.entries.Verdent.t2;
 
+import com.tenjava.entries.Verdent.t2.racing.RacingCommand;
 import com.tenjava.entries.Verdent.t2.boosts.*;
 import com.tenjava.entries.Verdent.t2.listeners.JockeyListener;
 import com.tenjava.entries.Verdent.t2.racing.BoostManager;
@@ -40,8 +41,7 @@ public class TenJava extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        RacingManager.getInstance().removeAllPowerUps();
-        RacingManager.getInstance().removeAllHorses();
+        RacingManager.getInstance().clearAllArenas();
     }
 
 }

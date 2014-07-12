@@ -65,4 +65,8 @@ public class Jockey {
         boost.activate(this);
     }
 
+    public Arena getArena() {
+        return getCurrentLap().getArena();
+    }
+
 }

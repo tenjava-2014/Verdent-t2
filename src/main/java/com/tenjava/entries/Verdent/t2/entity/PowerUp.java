@@ -8,10 +8,7 @@ package com.tenjava.entries.Verdent.t2.entity;
 import com.tenjava.entries.Verdent.t2.TenJava;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import com.tenjava.entries.Verdent.t2.utils.EntitySpawnManager;
-import com.tenjava.entries.Verdent.t2.utils.FireworkManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -25,12 +22,14 @@ public class PowerUp {
 
     private final int INTERVAL;
     private final Location location;
+    private final Arena arena;
     private Entity entity;
 
-    public PowerUp(int INTERVAL, Entity entity) {
+    public PowerUp(int INTERVAL, Arena arena, Entity entity) {
         this.INTERVAL = INTERVAL;
         this.entity = entity;
-        this.location = entity.getLocation().add(0, -1, 0);
+        this.location = entity.getLocation().add(0, -1, 0);;
+        this.arena = arena;
     }
 
     public Entity getEntity() {
@@ -39,7 +38,7 @@ public class PowerUp {
 
     public void pickUp() {
         this.entity.remove();
-        RacingManager.getInstance().removePowerUp(this.entity);
+        arena.removePowerUp(this.entity);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -51,7 +50,7 @@ public class PowerUp {
     public void spawn() {
         EntitySpawnManager manager = new EntitySpawnManager();
         this.entity = manager.spawnEntity(this.location, EntityType.ENDER_CRYSTAL);
-        RacingManager.getInstance().addPowerUp(this);
+        arena.addPowerUp(this);
     }
 
 }

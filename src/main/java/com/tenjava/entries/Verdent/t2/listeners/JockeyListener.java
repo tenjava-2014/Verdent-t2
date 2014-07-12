@@ -40,7 +40,7 @@ public class JockeyListener implements Listener {
             Location location = event.getClickedBlock().getLocation().add(0, 1, 0);
             EntitySpawnManager manager = new EntitySpawnManager();
             Entity entity = manager.spawnEntity(location, EntityType.ENDER_CRYSTAL);
-            RacingManager.getInstance().addPowerUp(entity);
+            //RacingManager.getInstance().addPowerUp(entity);
             event.setCancelled(true);
         }
     }
@@ -52,16 +52,17 @@ public class JockeyListener implements Listener {
         }
         Location loc = event.getTo();
         Player player = event.getPlayer();
-        PowerUp powerUp = RacingManager.getInstance().getPowerUp(loc);
-        if (powerUp != null) {
-            powerUp.pickUp();
-            IBoost boost = BoostManager.getInstance().getRandomBoost();
-            Jockey jockey = RacingManager.getInstance().getJockey(player.getUniqueId());
-            jockey.giveBoost(boost);
-            FireworkManager.playStrictFirework(loc.add(0, 1, 0), FireworkEffect.Type.BALL, jockey.getColor());
-            player.sendMessage("You have just picked up: " + boost.getName());
+        Jockey jockey = RacingManager.getInstance().getJockey(player);
+        if (jockey != null) {
+            PowerUp powerUp = jockey.getArena().getPowerUp(loc);
+            if (powerUp != null) {
+                powerUp.pickUp();
+                IBoost boost = BoostManager.getInstance().getRandomBoost();
+                jockey.giveBoost(boost);
+                FireworkManager.playStrictFirework(loc.add(0, 1, 0), FireworkEffect.Type.BALL, jockey.getColor());
+                player.sendMessage("You have just picked up: " + boost.getName());
+            }
         }
-
     }
 
     @EventHandler

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tenjava.entries.Verdent.t2;
+package com.tenjava.entries.Verdent.t2.racing;
 
+import com.tenjava.entries.Verdent.t2.entity.Arena;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,8 @@ public class RacingCommand {
         String subComm = args[0];
         if (subComm.equalsIgnoreCase("list")) {
             listSubComm(player, args);
+        } else if (subComm.equalsIgnoreCase("join")) {
+            joinSubComm(player, args);
         }
 
     }
@@ -53,6 +56,23 @@ public class RacingCommand {
                 list = list.equals("") ? str : list + ", " + str;
             }
             player.sendMessage(ChatColor.GREEN + list);
+        }
+    }
+
+    private void joinSubComm(Player player, String[] args) {
+        if (args.length != 2) {
+            player.sendMessage(ChatColor.RED + "Usage:");
+            player.sendMessage(ChatColor.RED + "/racing join <arenaName> - join to the specific arena");
+            return;
+        }
+        String arenaName = args[1];
+        Arena arena = RacingManager.getInstance().getArena(arenaName);
+        if (arena == null) {
+            player.sendMessage(ChatColor.RED + "There is no arena with name: " + arenaName);
+            return;
+        }
+        if (arena.addJockey(player)) {
+            player.sendMessage(ChatColor.GREEN + "You have joined arena succesfully");
         }
     }
 }
