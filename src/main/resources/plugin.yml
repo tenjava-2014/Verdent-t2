@@ -1,3 +1,7 @@
 name: Verdent-t2
 main: com.tenjava.entries.Verdent.t2.TenJava
 version: '${project.version}'
+
+commands:
+    test:
+        description: 'test'
