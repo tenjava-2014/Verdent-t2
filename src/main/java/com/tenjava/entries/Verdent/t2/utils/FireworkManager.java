@@ -80,7 +80,7 @@ public class FireworkManager {
             public void run() {
                 firework.detonate();
             }
-        }.runTaskLater(Bukkit.getPluginManager().getPlugin("WiveServerPlugin"), 5);
+        }.runTaskLater(Bukkit.getPluginManager().getPlugin("Verdent-t2"), 5);
 
     }
 

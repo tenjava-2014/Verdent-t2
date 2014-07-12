@@ -7,6 +7,9 @@ package com.tenjava.entries.Verdent.t2.listeners;
 
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import com.tenjava.entries.Verdent.t2.utils.EntitySpawnManager;
+import com.tenjava.entries.Verdent.t2.utils.FireworkManager;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -24,7 +27,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class JockeyListener implements Listener {
 
     @EventHandler
-    public void onPlayerMove(PlayerInteractEvent event) {
+    public void onPlayerInterractEvent(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
             Location location = event.getClickedBlock().getLocation().add(0, 1, 0);
             EntitySpawnManager manager = new EntitySpawnManager();
@@ -42,6 +45,7 @@ public class JockeyListener implements Listener {
         if (powerUp != null) {
             powerUp.remove();
             RacingManager.getInstance().removePowerUp(powerUp);
+            FireworkManager.playRandomFirework(loc.add(0, 1, 0), FireworkEffect.Type.BALL, Color.YELLOW);
             player.sendMessage("You have just picked up an power up");
         }
 

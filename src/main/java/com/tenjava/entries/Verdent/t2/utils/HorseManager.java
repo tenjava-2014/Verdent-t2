@@ -9,10 +9,12 @@ import net.minecraft.server.v1_7_R3.AttributeInstance;
 import net.minecraft.server.v1_7_R3.EntityInsentient;
 import net.minecraft.server.v1_7_R3.GenericAttributes;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -64,6 +66,9 @@ public class HorseManager extends EntitySpawnManager {
         horse.setCustomName(name);
         horse.setCustomNameVisible(true);
         horse.setTamed(tamed);
+        if (tamed) {
+            horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+        }
         horse.setOwner(player);
         horse.setStyle(style);
         horse.setColor(color);
