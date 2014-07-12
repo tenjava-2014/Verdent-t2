@@ -6,6 +6,8 @@
 package com.tenjava.entries.Verdent.t2.entity;
 
 import java.util.UUID;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 
@@ -16,11 +18,13 @@ import org.bukkit.entity.Player;
 public class Jockey {
 
     private final Player player;
+    private final Color color;
     private Horse horse;
     private Checkpoint nextCheckPoint;
 
-    public Jockey(Player player, Horse horse) {
+    public Jockey(Player player, Color color, Horse horse) {
         this.player = player;
+        this.color = color;
         this.horse = horse;
     }
 
@@ -38,6 +42,10 @@ public class Jockey {
 
     public Checkpoint getNextCheckPoint() {
         return nextCheckPoint;
+    }
+
+    public void setNextCheckPoint(Checkpoint checkpoint) {
+        this.nextCheckPoint = checkpoint;
     }
 
     public RacingLap getCurrentLap() {

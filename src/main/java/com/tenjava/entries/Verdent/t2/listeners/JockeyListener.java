@@ -5,6 +5,7 @@
  */
 package com.tenjava.entries.Verdent.t2.listeners;
 
+import com.tenjava.entries.Verdent.t2.entity.PowerUp;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import com.tenjava.entries.Verdent.t2.utils.EntitySpawnManager;
 import com.tenjava.entries.Verdent.t2.utils.FireworkManager;
@@ -28,6 +29,9 @@ public class JockeyListener implements Listener {
 
     @EventHandler
     public void onPlayerInterractEvent(PlayerInteractEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
             Location location = event.getClickedBlock().getLocation().add(0, 1, 0);
             EntitySpawnManager manager = new EntitySpawnManager();
@@ -39,12 +43,14 @@ public class JockeyListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
         Location loc = event.getTo();
         Player player = event.getPlayer();
-        Entity powerUp = RacingManager.getInstance().getPowerUp(loc);
+        PowerUp powerUp = RacingManager.getInstance().getPowerUp(loc);
         if (powerUp != null) {
-            powerUp.remove();
-            RacingManager.getInstance().removePowerUp(powerUp);
+            powerUp.pickUp();
             FireworkManager.playRandomFirework(loc.add(0, 1, 0), FireworkEffect.Type.BALL, Color.YELLOW);
             player.sendMessage("You have just picked up an power up");
         }

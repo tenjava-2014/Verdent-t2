@@ -8,12 +8,10 @@ package com.tenjava.entries.Verdent.t2.racing;
 import com.tenjava.entries.Verdent.t2.entity.Arena;
 import com.tenjava.entries.Verdent.t2.entity.Checkpoint;
 import com.tenjava.entries.Verdent.t2.entity.Jockey;
-import com.tenjava.entries.Verdent.t2.entity.RacingLap;
-import java.util.ArrayList;
+import com.tenjava.entries.Verdent.t2.entity.PowerUp;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Location;
-import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
 
@@ -24,7 +22,7 @@ import org.bukkit.entity.Horse;
 public class RacingManager {
 
     private final static RacingManager SINGLETON = new RacingManager();
-    private final ArrayList<Entity> powerUps = new ArrayList<Entity>();
+    private final HashMap<UUID, PowerUp> powerUps = new HashMap<UUID, PowerUp>();
     private final HashMap<UUID, Horse> horses = new HashMap<UUID, Horse>();
     private final HashMap<UUID, Jockey> jockeys = new HashMap<UUID, Jockey>();
 
@@ -36,28 +34,38 @@ public class RacingManager {
     }
 
     public synchronized void addPowerUp(Entity entity) {
-        powerUps.remove(entity);
-        powerUps.add(entity);
+        addPowerUp(entity, 160);
+    }
+
+    public synchronized void addPowerUp(Entity entity, int interval) {
+        PowerUp powerUp = new PowerUp(interval, entity);
+        addPowerUp(powerUp);
+    }
+
+    public synchronized void addPowerUp(PowerUp powerUp) {
+        UUID uuid = powerUp.getEntity().getUniqueId();
+        powerUps.remove(uuid);
+        powerUps.put(uuid, powerUp);
     }
 
     public synchronized void removePowerUp(Entity entity) {
-        powerUps.remove(entity);
+        powerUps.remove(entity.getUniqueId());
     }
 
     public synchronized void removeAllPowerUps() {
-        for (Entity entity : powerUps) {
-            entity.remove();
+        for (PowerUp powerUp : powerUps.values()) {
+            powerUp.getEntity().remove();
         }
     }
 
-    public synchronized Entity getPowerUp(Location location) {
-        for (Entity entity : powerUps) {
-            Location loc = entity.getLocation().add(0, -1, 0);
+    public synchronized PowerUp getPowerUp(Location location) {
+        for (PowerUp powerUp : powerUps.values()) {
+            Location loc = powerUp.getEntity().getLocation().add(0, -1, 0);
             if (loc.getBlockX() == location.getBlockX()
                     && loc.getBlockY() == location.getBlockY()
                     && loc.getBlockZ() == location.getBlockZ()
                     && loc.getWorld().equals(location.getWorld())) {
-                return entity;
+                return powerUp;
             }
         }
         return null;
@@ -83,6 +91,10 @@ public class RacingManager {
         }
         Arena arena = jockey.getCurrentLap().getArena();
         checkpoint = arena.getNextCheckpoint(checkpoint);
+        if (checkpoint != null) {
+            jockey.setNextCheckPoint(checkpoint);
+            return true;
+        }
         return false;
     }
 

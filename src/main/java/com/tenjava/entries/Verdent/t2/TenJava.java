@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TenJava extends JavaPlugin {
+    
+    public static String NAME = "Verdent-t2";
 
     @Override
     public void onEnable() {

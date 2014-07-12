@@ -13,11 +13,25 @@ import java.util.HashMap;
  */
 public class RacingLap {
 
+    private final int lapNumber;
     private final HashMap<Integer, Checkpoint> checkpoints = new HashMap<Integer, Checkpoint>();
     private final Arena arena;
 
-    public RacingLap(Arena arena) {
+    public RacingLap(int lapNumber, Arena arena) {
+        this.lapNumber = lapNumber;
         this.arena = arena;
+    }
+
+    public int getLapNumber() {
+        return lapNumber;
+    }
+
+    public int getNumberOfCheckpoints() {
+        return this.checkpoints.size();
+    }
+
+    public Arena getArena() {
+        return arena;
     }
 
     public void registerCheckpoint(Checkpoint checkpoint) {
@@ -35,12 +49,22 @@ public class RacingLap {
         return this.checkpoints.isEmpty();
     }
 
-    public int getNumberOfCheckpoints() {
-        return this.checkpoints.size();
+    public Checkpoint getNextCheckpoint(Checkpoint checkpoint) {
+        int checpointNumber = checkpoint.getCheckpointNumber();
+        return getNextCheckpoint(checpointNumber);
     }
 
-    public Arena getArena() {
-        return arena;
+    public Checkpoint getNextCheckpoint(int checkpointNumber) {
+        return checkpoints.get(checkpointNumber + 1);
+    }
+
+    public boolean hasNextCheckpoint(Checkpoint checkpoint) {
+        int checpointNumber = checkpoint.getCheckpointNumber();
+        return hasNextCheckpoint(checpointNumber);
+    }
+
+    public boolean hasNextCheckpoint(int checkpointNumber) {
+        return checkpoints.containsKey(checkpointNumber + 1);
     }
 
 }

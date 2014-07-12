@@ -16,7 +16,24 @@ public class Arena {
     private final HashMap<Integer, RacingLap> laps = new HashMap<Integer, RacingLap>();
 
     public Checkpoint getNextCheckpoint(Checkpoint checkpoint) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        RacingLap lap = checkpoint.getLap();
+        if (lap.hasNextCheckpoint(checkpoint)) {
+            return lap.getNextCheckpoint(checkpoint);
+        }
+        lap = getNextLap(lap);
+        if (lap != null) {
+            return lap.getNextCheckpoint(0);
+        }
+        return null;
+    }
+
+    public RacingLap getNextLap(RacingLap lap) {
+        int lapNumber = lap.getLapNumber();
+        return getNextLap(lapNumber);
+    }
+
+    public RacingLap getNextLap(int lapNumber) {
+        return laps.get(lapNumber + 1);
     }
 
 }

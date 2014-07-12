@@ -5,6 +5,7 @@
  */
 package com.tenjava.entries.Verdent.t2.utils;
 
+import com.tenjava.entries.Verdent.t2.TenJava;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -80,7 +81,7 @@ public class FireworkManager {
             public void run() {
                 firework.detonate();
             }
-        }.runTaskLater(Bukkit.getPluginManager().getPlugin("Verdent-t2"), 5);
+        }.runTaskLater(Bukkit.getPluginManager().getPlugin(TenJava.NAME), 5);
 
     }
 
