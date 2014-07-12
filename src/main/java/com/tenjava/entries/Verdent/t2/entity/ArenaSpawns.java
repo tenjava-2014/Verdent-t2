@@ -43,7 +43,6 @@ public class ArenaSpawns {
     }
 
     public synchronized void movePlayerToSpawn(Player player) {
-        String name = player.getName();
         Location l = getPlayerSpawn(player.getUniqueId());
         if (l == null) {
             return;
@@ -54,7 +53,6 @@ public class ArenaSpawns {
     public synchronized String givePlayerSpawn(Player player) {
         Location loc = getFirstEmpySpawn();
         UUID uuid = player.getUniqueId();
-        //String arenaName = arena.getName();
         if (loc == null) {
             return "There are no free spawns in this arena!";
         } else if (fullSpawns.containsKey(uuid)) {

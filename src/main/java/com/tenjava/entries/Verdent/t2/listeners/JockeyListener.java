@@ -24,6 +24,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.vehicle.VehicleExitEvent;
 
 /**
  *
@@ -66,8 +68,23 @@ public class JockeyListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
+    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        Player player = event.getPlayer();
+        Jockey jockey = RacingManager.getInstance().getJockey(player);
+        if (jockey != null) {
+            event.setCancelled(true);
+        }
+    }
 
+    @EventHandler
+    public void onPlayerDismount(VehicleExitEvent event) {
+        if (event.getExited() instanceof Player) {
+            Player player = (Player) event.getExited();
+            Jockey jockey = RacingManager.getInstance().getJockey(player);
+            if (jockey != null) {
+                event.setCancelled(true);
+            }
+        }
     }
 
 }

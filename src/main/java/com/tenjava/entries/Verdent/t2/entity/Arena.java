@@ -29,10 +29,14 @@ public class Arena {
     private final HorseManager hm = new HorseManager();
     private final ArenaSpawns spawns;
     private final String name;
+    private final Location location1;
+    private final Location location2;
 
-    public Arena(String name, Location[] spawns) {
+    public Arena(Location[] spawns, String name, Location location1, Location location2) {
         this.name = name;
         this.spawns = new ArenaSpawns(spawns, this);
+        this.location1 = location1;
+        this.location2 = location2;
     }
 
     public Checkpoint getNextCheckpoint(Checkpoint checkpoint) {
@@ -75,7 +79,7 @@ public class Arena {
     }
 
     public boolean addJockey(Player player) {
-        Jockey jockey = new Jockey(player, Color.BLUE, null);
+        Jockey jockey = new Jockey(player, Color.BLUE, player.getLocation(), null);
         return addJockey(jockey);
     }
 
@@ -92,7 +96,20 @@ public class Arena {
         jockey.setHorse(horse);
         horses.put(jockey.getHorse().getUniqueId(), jockey.getHorse());
         jockeys.put(jockey.getPlayerUUID(), jockey);
+        giveFirstCheckpoint(jockey);
         return true;
+    }
+
+    public void removeJockey(Jockey jockey) {
+        jockey.getPlayer().getVehicle().eject();
+        jockeys.remove(jockey.getPlayerUUID());
+        spawns.removePlayerSpawn(jockey.getPlayerUUID());
+    }
+
+    public void removeAllJockeys() {
+        for (Jockey jockey : this.jockeys.values()) {
+            jockey.exitArena();
+        }
     }
 
     public synchronized void addPowerUp(Entity entity) {
@@ -143,6 +160,31 @@ public class Arena {
 
     public String getName() {
         return this.name;
+    }
+
+    private void giveFirstCheckpoint(Jockey jockey) {
+        Checkpoint checkpoint = laps.get(1).getNextCheckpoint(0);
+        jockey.setCheckPoint(checkpoint);
+    }
+
+    public void reloadArena() {
+        removeAllHorses();
+        removeAllJockeys();
+        removeAllPowerUps();
+    }
+
+    public void sendMessageToAll(String message) {
+        for (Jockey jockey : jockeys.values()) {
+            jockey.getPlayer().sendMessage(message);
+        }
+    }
+
+    public boolean addSpawn(Location location) {
+        if (spawns.getCapacity() >= 17) {
+            return false;
+        }
+        spawns.registerSpawn(location);
+        return true;
     }
 
 }

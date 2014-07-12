@@ -8,15 +8,11 @@ package com.tenjava.entries.Verdent.t2.racing;
 import com.tenjava.entries.Verdent.t2.entity.Arena;
 import com.tenjava.entries.Verdent.t2.entity.Checkpoint;
 import com.tenjava.entries.Verdent.t2.entity.Jockey;
-import com.tenjava.entries.Verdent.t2.entity.PowerUp;
-import com.tenjava.entries.Verdent.t2.utils.HorseManager;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
-import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 
 /**
@@ -27,6 +23,11 @@ public class RacingManager {
 
     private final static RacingManager SINGLETON = new RacingManager();
     private final HashMap<String, Arena> arenas = new HashMap<String, Arena>();
+    private final HashMap<UUID, String> arenaNames = new HashMap<UUID, String>();
+    private final HashMap<UUID, Location> arenaLocation1 = new HashMap<UUID, Location>();
+    private final HashMap<UUID, Location> arenaLocation2 = new HashMap<UUID, Location>();
+    private final HashMap<UUID, String> powerEnabled = new HashMap<UUID, String>();
+    private final HashMap<UUID, String> spawnEnabled = new HashMap<UUID, String>();
 
     private RacingManager() {
     }
@@ -36,7 +37,7 @@ public class RacingManager {
     }
 
     public boolean setNextCheckpoint(Jockey jockey) {
-        Checkpoint checkpoint = jockey.getNextCheckPoint();
+        Checkpoint checkpoint = jockey.getCheckPoint();
         UUID uuid = jockey.getPlayerUUID();
         if (!checkpoint.containsPlayer(uuid)) {
             checkpoint.addPlayer(uuid);
@@ -44,7 +45,7 @@ public class RacingManager {
         Arena arena = jockey.getCurrentLap().getArena();
         checkpoint = arena.getNextCheckpoint(checkpoint);
         if (checkpoint != null) {
-            jockey.setNextCheckPoint(checkpoint);
+            jockey.setCheckPoint(checkpoint);
             return true;
         }
         return false;
@@ -58,10 +59,23 @@ public class RacingManager {
         return arenas.get(name);
     }
 
+    public void registerArena(Arena arena) {
+        arenas.put(arena.getName(), arena);
+    }
+
+    public Arena removeArena(String name) {
+        Arena arena = arenas.remove(name);
+        if (arena != null) {
+            arena.reloadArena();
+        }
+        return arena;
+    }
+
     public void clearAllArenas() {
         for (Arena arena : arenas.values()) {
             arena.removeAllPowerUps();
             arena.removeAllHorses();
+            arena.removeAllJockeys();
         }
     }
 
@@ -71,10 +85,6 @@ public class RacingManager {
         }
         Random random = new Random();
         int index = random.nextInt(this.arenas.size());
-        /*System.out.println(this.boosts.size());
-         System.out.println(index);
-         index = index < 0 ? 0 : index;
-         System.out.println(index);*/
         String arenaName = (String) this.arenas.keySet().toArray()[index];
         Arena arena = arenas.get(arenaName);
         arena.addJockey(player);
@@ -86,7 +96,7 @@ public class RacingManager {
 
     public Jockey getJockey(UUID uuid) {
         for (Arena arena : arenas.values()) {
-            Jockey jockey = getJockey(uuid);
+            Jockey jockey = arena.getJockey(uuid);
             if (jockey != null) {
                 return jockey;
             }
@@ -97,6 +107,66 @@ public class RacingManager {
     public boolean isInArena(Player player) {
         Jockey jockey = getJockey(player);
         return jockey != null;
+    }
+
+    public void addArenaName(UUID uuid, String name) {
+        arenaNames.put(uuid, name);
+    }
+
+    public boolean containsArenaName(UUID uuid) {
+        return arenaNames.containsKey(uuid);
+    }
+
+    public String removeArenaName(UUID uuid) {
+        return arenaNames.remove(uuid);
+    }
+
+    public void addArenaLocation1(UUID uuid, Location loc) {
+        arenaLocation1.put(uuid, loc);
+    }
+
+    public boolean containsArenaLocation1(UUID uuid) {
+        return arenaLocation1.containsKey(uuid);
+    }
+
+    public Location removeArenaLocation1(UUID uuid) {
+        return arenaLocation1.remove(uuid);
+    }
+
+    public void addArenaLocation2(UUID uuid, Location loc) {
+        arenaLocation2.put(uuid, loc);
+    }
+
+    public boolean containsArenaLocation2(UUID uuid) {
+        return arenaLocation2.containsKey(uuid);
+    }
+
+    public Location removeArenaLocation2(UUID uuid) {
+        return arenaLocation2.remove(uuid);
+    }
+
+    public void addPowerEnabled(UUID uuid, String name) {
+        powerEnabled.put(uuid, name);
+    }
+
+    public boolean containsPowerEnabled(UUID uuid) {
+        return powerEnabled.containsKey(uuid);
+    }
+
+    public String removePowerEnabled(UUID uuid) {
+        return powerEnabled.remove(uuid);
+    }
+
+    public void addSpawnEnabled(UUID uuid, String name) {
+        spawnEnabled.put(uuid, name);
+    }
+
+    public boolean containsSpawnEnabled(UUID uuid) {
+        return spawnEnabled.containsKey(uuid);
+    }
+
+    public String removeSpawnEnabled(UUID uuid) {
+        return spawnEnabled.remove(uuid);
     }
 
 }

@@ -9,6 +9,7 @@ import com.tenjava.entries.Verdent.t2.boosts.IBoost;
 import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 
@@ -20,12 +21,14 @@ public class Jockey {
 
     private final Player player;
     private final Color color;
+    private final Location lastLocation;
     private Horse horse;
     private Checkpoint nextCheckPoint;
 
-    public Jockey(Player player, Color color, Horse horse) {
+    public Jockey(Player player, Color color, Location lastLocation, Horse horse) {
         this.player = player;
         this.color = color;
+        this.lastLocation = lastLocation;
         this.horse = horse;
     }
 
@@ -45,11 +48,11 @@ public class Jockey {
         return player;
     }
 
-    public Checkpoint getNextCheckPoint() {
+    public Checkpoint getCheckPoint() {
         return nextCheckPoint;
     }
 
-    public void setNextCheckPoint(Checkpoint checkpoint) {
+    public void setCheckPoint(Checkpoint checkpoint) {
         this.nextCheckPoint = checkpoint;
     }
 
@@ -67,6 +70,11 @@ public class Jockey {
 
     public Arena getArena() {
         return getCurrentLap().getArena();
+    }
+
+    public void exitArena() {
+        getArena().removeJockey(this);
+        player.teleport(lastLocation);
     }
 
 }

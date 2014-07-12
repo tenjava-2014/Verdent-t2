@@ -1,9 +1,10 @@
 package com.tenjava.entries.Verdent.t2;
 
-import com.tenjava.entries.Verdent.t2.racing.RacingCommand;
 import com.tenjava.entries.Verdent.t2.boosts.*;
+import com.tenjava.entries.Verdent.t2.listeners.ArenaListener;
 import com.tenjava.entries.Verdent.t2.listeners.JockeyListener;
 import com.tenjava.entries.Verdent.t2.racing.BoostManager;
+import com.tenjava.entries.Verdent.t2.racing.RacingCommand;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -18,11 +19,9 @@ public class TenJava extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new JockeyListener(), this);
+        getServer().getPluginManager().registerEvents(new ArenaListener(), this);
         BoostManager.getInstance().registerBoost(new SpeedBoost());
         BoostManager.getInstance().registerBoost(new GreaterSpeedBoost());
-        for (Player player : getServer().getOnlinePlayers()) {
-            RacingManager.getInstance().addJockey(player);
-        }
     }
 
     @Override
