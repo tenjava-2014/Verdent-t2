@@ -43,6 +43,7 @@ public class Arena {
         this.spawns = new ArenaSpawns(spawns, this);
         this.location1 = location1;
         this.location2 = location2;
+        laps.put(1, new RacingLap(1, this));
     }
 
     public Checkpoint getNextCheckpoint(Checkpoint checkpoint) {
