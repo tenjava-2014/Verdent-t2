@@ -36,6 +36,10 @@ public class Jockey {
         this.horse = horse;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public Player getPlayer() {
         return player;
     }

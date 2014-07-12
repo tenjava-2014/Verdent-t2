@@ -5,6 +5,7 @@
  */
 package com.tenjava.entries.Verdent.t2.listeners;
 
+import com.tenjava.entries.Verdent.t2.entity.Jockey;
 import com.tenjava.entries.Verdent.t2.entity.PowerUp;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import com.tenjava.entries.Verdent.t2.utils.EntitySpawnManager;
@@ -51,7 +52,8 @@ public class JockeyListener implements Listener {
         PowerUp powerUp = RacingManager.getInstance().getPowerUp(loc);
         if (powerUp != null) {
             powerUp.pickUp();
-            FireworkManager.playRandomFirework(loc.add(0, 1, 0), FireworkEffect.Type.BALL, Color.YELLOW);
+            /*Jockey jockey = RacingManager.getInstance().getJockey(player.getUniqueId());
+            FireworkManager.playRandomFirework(loc.add(0, 1, 0), FireworkEffect.Type.BALL, jockey.getColor());*/
             player.sendMessage("You have just picked up an power up");
         }
 

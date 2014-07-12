@@ -61,9 +61,9 @@ public class RacingManager {
     public synchronized PowerUp getPowerUp(Location location) {
         for (PowerUp powerUp : powerUps.values()) {
             Location loc = powerUp.getEntity().getLocation().add(0, -1, 0);
-            if (loc.getBlockX() == location.getBlockX()
-                    && loc.getBlockY() == location.getBlockY()
-                    && loc.getBlockZ() == location.getBlockZ()
+            if (loc.getBlockX() <= location.getBlockX() + 1 && loc.getBlockX() >= location.getBlockX() - 1
+                    && loc.getBlockY() <= location.getBlockY() + 1 && loc.getBlockY() >= location.getBlockY() - 1
+                    && loc.getBlockZ() <= location.getBlockZ() + 1 && loc.getBlockZ() >= location.getBlockZ() - 1
                     && loc.getWorld().equals(location.getWorld())) {
                 return powerUp;
             }

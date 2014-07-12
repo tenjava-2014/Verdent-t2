@@ -8,7 +8,10 @@ package com.tenjava.entries.Verdent.t2.entity;
 import com.tenjava.entries.Verdent.t2.TenJava;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import com.tenjava.entries.Verdent.t2.utils.EntitySpawnManager;
+import com.tenjava.entries.Verdent.t2.utils.FireworkManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -27,7 +30,7 @@ public class PowerUp {
     public PowerUp(int INTERVAL, Entity entity) {
         this.INTERVAL = INTERVAL;
         this.entity = entity;
-        this.location = entity.getLocation();
+        this.location = entity.getLocation().add(0, -1, 0);
     }
 
     public Entity getEntity() {
