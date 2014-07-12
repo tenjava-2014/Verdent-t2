@@ -109,6 +109,15 @@ public class RacingManager {
         return jockey != null;
     }
 
+    public boolean isInArena(Location loc) {
+        for (Arena arena : arenas.values()) {
+            if (arena.isInArena(loc)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addArenaName(UUID uuid, String name) {
         arenaNames.put(uuid, name);
     }
@@ -146,6 +155,7 @@ public class RacingManager {
     }
 
     public void addPowerEnabled(UUID uuid, String name) {
+        powerEnabled.remove(uuid);
         powerEnabled.put(uuid, name);
     }
 
@@ -157,7 +167,12 @@ public class RacingManager {
         return powerEnabled.remove(uuid);
     }
 
+    public String getPowerEnabled(UUID uuid) {
+        return powerEnabled.get(uuid);
+    }
+
     public void addSpawnEnabled(UUID uuid, String name) {
+        spawnEnabled.remove(uuid);
         spawnEnabled.put(uuid, name);
     }
 
@@ -167,6 +182,10 @@ public class RacingManager {
 
     public String removeSpawnEnabled(UUID uuid) {
         return spawnEnabled.remove(uuid);
+    }
+
+    public String getSpawnEnabled(UUID uuid) {
+        return spawnEnabled.get(uuid);
     }
 
 }

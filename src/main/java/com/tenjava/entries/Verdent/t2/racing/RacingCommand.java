@@ -101,14 +101,18 @@ public class RacingCommand {
     }
 
     private void arenaSubComm(Player player, String[] args) {
-        if (args.length == 1) {
+        if (!player.isOp()) {
+            player.sendMessage(ChatColor.RED + "Sorry this command is for OP players only!");
+            return;
+        } else if (args.length == 1) {
             player.sendMessage(ChatColor.GOLD + "Usage:");
             player.sendMessage(ChatColor.GREEN + "/racing arena new <arenaName> - starts creating of new arena");
             player.sendMessage(ChatColor.GREEN + "/racing arena confirm - finishes up new arena");
             player.sendMessage(ChatColor.GREEN + "/racing arena cancel - cancel new arena");
             player.sendMessage(ChatColor.GREEN + "/racing arena destroy <arenaName> - removes target arena");
-            player.sendMessage(ChatColor.GREEN + "/racing arena power <arenaName> on/off - activates creating of new power up spawns ");
-            player.sendMessage(ChatColor.GREEN + "/racing arena spawn <arenaName> on/off - activates creating of new spawns ");
+            player.sendMessage(ChatColor.GREEN + "/racing arena power <arenaName> on/off - activates creating of new power up spawns");
+            player.sendMessage(ChatColor.GREEN + "/racing arena spawn <arenaName> on/off - activates creating of new spawns");
+            player.sendMessage(ChatColor.GREEN + "/racing arena checkpoint <arenaName> on/off - activates creating of checkpoints");
             return;
         }
         String comm = args[1];
@@ -134,6 +138,12 @@ public class RacingCommand {
             return;
         } else if (RacingManager.getInstance().containsArenaName(player.getUniqueId())) {
             player.sendMessage(ChatColor.BLUE + "Creating of new arena has been allowed before!");
+            return;
+        } else if (RacingManager.getInstance().containsPowerEnabled(player.getUniqueId())) {
+            player.sendMessage(ChatColor.RED + "Turn of power up creating first!");
+            return;
+        } else if (RacingManager.getInstance().containsSpawnEnabled(player.getUniqueId())) {
+            player.sendMessage(ChatColor.RED + "Turn of spawn creating first!");
             return;
         }
         String arenaName = args[2];
@@ -199,11 +209,67 @@ public class RacingCommand {
     }
 
     private void powerArenaCommand(Player player, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        UUID uuid = player.getUniqueId();
+        RacingManager rm = RacingManager.getInstance();
+        if (args.length != 4) {
+            player.sendMessage(ChatColor.RED + "Usage:");
+            player.sendMessage(ChatColor.RED + "/racing arena power <arenaName> on/off - activates creating of new power up spawns");
+            return;
+        } else if (rm.containsArenaName(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have pending arena creating!");
+            return;
+        } else if (rm.containsSpawnEnabled(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have to turn off spawn creating first!");
+            return;
+        }
+        String arenaName = args[2];
+        String operator = args[3];
+        Arena arena = rm.getArena(arenaName);
+        if (arena == null) {
+            player.sendMessage(ChatColor.RED + "There is no arena of this name: " + arenaName);
+            return;
+        }
+        if (operator.equalsIgnoreCase("on")) {
+            rm.addPowerEnabled(uuid, arenaName);
+            player.sendMessage(ChatColor.GREEN + "Power up spawning has been enabled for arena: " + arenaName);
+        } else if (operator.equalsIgnoreCase("off")) {
+            rm.removePowerEnabled(uuid);
+            player.sendMessage(ChatColor.GREEN + "Power up spawning has been canceled");
+        } else {
+            player.sendMessage(ChatColor.RED + "Only on/off allowed");
+        }
     }
 
     private void spawnArenaCommand(Player player, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        UUID uuid = player.getUniqueId();
+        RacingManager rm = RacingManager.getInstance();
+        if (args.length != 4) {
+            player.sendMessage(ChatColor.RED + "Usage:");
+            player.sendMessage(ChatColor.RED + "/racing arena spawn <arenaName> on/off - activates creating of new spawns");
+            return;
+        } else if (rm.containsArenaName(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have pending arena creating!");
+            return;
+        } else if (rm.containsPowerEnabled(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have to turn off power up creating first!");
+            return;
+        }
+        String arenaName = args[2];
+        String operator = args[3];
+        Arena arena = rm.getArena(arenaName);
+        if (arena == null) {
+            player.sendMessage(ChatColor.RED + "There is no arena of this name: " + arenaName);
+            return;
+        }
+        if (operator.equalsIgnoreCase("on")) {
+            rm.addSpawnEnabled(uuid, arenaName);
+            player.sendMessage(ChatColor.GREEN + "Spawn creating has been enabled for arena: " + arenaName);
+        } else if (operator.equalsIgnoreCase("off")) {
+            rm.removeSpawnEnabled(uuid);
+            player.sendMessage(ChatColor.GREEN + "Spawn creating has been canceled");
+        } else {
+            player.sendMessage(ChatColor.RED + "Only on/off allowed");
+        }
     }
 
     private void recalculatingLocations(Player player) {

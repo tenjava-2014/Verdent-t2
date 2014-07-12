@@ -7,7 +7,6 @@ package com.tenjava.entries.Verdent.t2.boosts;
 
 import com.tenjava.entries.Verdent.t2.TenJava;
 import com.tenjava.entries.Verdent.t2.entity.Jockey;
-import com.tenjava.entries.Verdent.t2.racing.BoostManager;
 import com.tenjava.entries.Verdent.t2.utils.HorseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Horse;

@@ -5,16 +5,19 @@
  */
 package com.tenjava.entries.Verdent.t2.entity;
 
+import com.tenjava.entries.Verdent.t2.TenJava;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import com.tenjava.entries.Verdent.t2.utils.HorseManager;
 import java.util.HashMap;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -31,6 +34,9 @@ public class Arena {
     private final String name;
     private final Location location1;
     private final Location location2;
+    private boolean started = false;
+    private int startId = -1;
+    private int minCountOfPlayers = 1; // for testing 
 
     public Arena(Location[] spawns, String name, Location location1, Location location2) {
         this.name = name;
@@ -97,13 +103,25 @@ public class Arena {
         horses.put(jockey.getHorse().getUniqueId(), jockey.getHorse());
         jockeys.put(jockey.getPlayerUUID(), jockey);
         giveFirstCheckpoint(jockey);
+        if (jockeys.size() == minCountOfPlayers) {
+            start();
+        }
         return true;
     }
 
     public void removeJockey(Jockey jockey) {
         jockey.getPlayer().getVehicle().eject();
         jockeys.remove(jockey.getPlayerUUID());
+        horses.remove(jockey.getHorse().getUniqueId());
+        jockey.getHorse().remove();
         spawns.removePlayerSpawn(jockey.getPlayerUUID());
+        if (jockeys.size() < minCountOfPlayers //for testing puposes :-)
+                && !started
+                && startId != -1) {
+            Bukkit.getScheduler().cancelTask(startId);
+        } else if (jockeys.size() < 1) {
+            reloadArena();
+        }
     }
 
     public void removeAllJockeys() {
@@ -164,6 +182,9 @@ public class Arena {
 
     private void giveFirstCheckpoint(Jockey jockey) {
         Checkpoint checkpoint = laps.get(1).getNextCheckpoint(0);
+        if (checkpoint == null) {
+            throw new IllegalStateException("There is no Checkpoint created!");
+        }
         jockey.setCheckPoint(checkpoint);
     }
 
@@ -171,6 +192,9 @@ public class Arena {
         removeAllHorses();
         removeAllJockeys();
         removeAllPowerUps();
+        started = false;
+        Bukkit.getScheduler().cancelTask(startId);
+        startId = -1;
     }
 
     public void sendMessageToAll(String message) {
@@ -185,6 +209,48 @@ public class Arena {
         }
         spawns.registerSpawn(location);
         return true;
+    }
+
+    public boolean isInArena(Location loc) {
+        return ((loc.getX() <= location1.getX()) && (loc.getX() >= location2.getX()))
+                && ((loc.getY() <= location1.getY()) && (loc.getY() >= location2.getY()))
+                && ((loc.getZ() <= location1.getZ()) && (loc.getZ() >= location2.getZ()))
+                && loc.getWorld().getName().equals(location1.getWorld().getName());
+    }
+
+    public void start() {
+        sendMessageToAll(ChatColor.GOLD + "The game will start in 15s");
+        startId = new BukkitRunnable() {
+            int count = 15;
+
+            @Override
+            public void run() {
+                count--;
+                if (count <= 0) {
+                    started = true;
+                    Bukkit.getScheduler().cancelTask(startId);
+                    sendMessageToAll(ChatColor.GOLD + "The game has started!");
+                } else {
+                    sendMessageToAll(ChatColor.BLUE + "Only " + count + "s remaining.");
+                }
+            }
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin(TenJava.NAME), 0, 20).getTaskId();
+    }
+
+    public boolean hasStarted() {
+        return started;
+    }
+
+    public void end() {
+        sendMessageToAll(ChatColor.GOLD + "Arena will be reloding after 30s");
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                sendMessageToAll(ChatColor.GOLD + "Reloading arena");
+                reloadArena();
+            }
+        }.runTaskLater(Bukkit.getPluginManager().getPlugin(TenJava.NAME), 600);
     }
 
 }
