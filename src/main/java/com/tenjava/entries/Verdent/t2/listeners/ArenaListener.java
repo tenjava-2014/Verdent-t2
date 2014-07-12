@@ -6,6 +6,8 @@
 package com.tenjava.entries.Verdent.t2.listeners;
 
 import com.tenjava.entries.Verdent.t2.entity.Arena;
+import com.tenjava.entries.Verdent.t2.entity.Checkpoint;
+import com.tenjava.entries.Verdent.t2.entity.RacingLap;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import com.tenjava.entries.Verdent.t2.utils.EntitySpawnManager;
 import java.util.UUID;
@@ -43,6 +45,8 @@ public class ArenaListener implements Listener {
             event.setCancelled(powerUpCreating(p, l, action, clearHands));
         } else if (rm.containsSpawnEnabled(p.getUniqueId())) {
             event.setCancelled(spawnCreating(p, l, action, clearHands));
+        } else if (rm.containsCheckpointEnabled(p.getUniqueId())) {
+            event.setCancelled(checkpointCreating(p, l, action, clearHands));
         }
     }
 
@@ -111,6 +115,44 @@ public class ArenaListener implements Listener {
                 player.sendMessage(ChatColor.RED + "Full capacity of spawns has been reached!");
             } else {
                 player.sendMessage(ChatColor.GREEN + "New spawn has been set up.");
+            }
+        }
+        return true;
+    }
+
+    private boolean checkpointCreating(Player player, Location l, Action action, boolean clearHands) {
+        if (!clearHands) {
+            return false;
+        }
+        UUID uuid = player.getUniqueId();
+        RacingManager rm = RacingManager.getInstance();
+        if (action == Action.RIGHT_CLICK_BLOCK) {
+            rm.addCheckpointLocation2(uuid, l);
+            if (rm.containsCheckpointLocation1(uuid)) {
+                String arenaName = rm.getCheckpointEnabled(uuid);
+                Location loc1 = rm.removeCheckpointLocation1(uuid);
+                Location loc2 = rm.removeCheckpointLocation2(uuid);
+                Arena arena = rm.getArena(arenaName);
+                RacingLap lap = arena.getRacingLap(0);
+                Checkpoint checkpoint = new Checkpoint(lap.getNumberOfCheckpoints(), loc1, loc2, lap);
+                lap.registerCheckpoint(checkpoint.getCheckpointNumber(), checkpoint);
+                player.sendMessage(ChatColor.GREEN + "Checkpoint has been created!");
+            } else {
+                player.sendMessage(ChatColor.GREEN + "Location of the first block set. Please select second one by your left mouse button.");
+            }
+        } else if (action == Action.LEFT_CLICK_BLOCK) {
+            rm.addCheckpointLocation1(uuid, l);
+            if (rm.containsCheckpointLocation2(uuid)) {
+                String arenaName = rm.getCheckpointEnabled(uuid);
+                Location loc1 = rm.removeCheckpointLocation1(uuid);
+                Location loc2 = rm.removeCheckpointLocation2(uuid);
+                Arena arena = rm.getArena(arenaName);
+                RacingLap lap = arena.getRacingLap(0);
+                Checkpoint checkpoint = new Checkpoint(lap.getNumberOfCheckpoints(), loc1, loc2, lap);
+                lap.registerCheckpoint(checkpoint.getCheckpointNumber(), checkpoint);
+                player.sendMessage(ChatColor.GREEN + "Checkpoint has been created!");
+            } else {
+                player.sendMessage(ChatColor.GREEN + "Location of the first block set. Please select second one by your right mouse button.");
             }
         }
         return true;

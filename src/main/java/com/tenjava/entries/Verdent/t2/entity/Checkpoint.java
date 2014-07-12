@@ -51,4 +51,8 @@ public class Checkpoint {
                 && loc.getWorld().equals(location1.getWorld());
     }
 
+    public void reload() {
+        players.clear();
+    }
+
 }

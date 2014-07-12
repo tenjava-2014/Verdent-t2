@@ -34,10 +34,6 @@ public class RacingLap {
         return arena;
     }
 
-    public void registerCheckpoint(Checkpoint checkpoint) {
-        registerCheckpoint(this.checkpoints.size(), checkpoint);
-    }
-
     public void registerCheckpoint(int number, Checkpoint checkpoint) {
         if (this.checkpoints.containsKey(number)) {
             throw new IllegalArgumentException("Checkpoint with number " + number + " is already registered!");
@@ -65,6 +61,12 @@ public class RacingLap {
 
     public boolean hasNextCheckpoint(int checkpointNumber) {
         return checkpoints.containsKey(checkpointNumber + 1);
+    }
+
+    public void reload() {
+        for (Checkpoint checkpoint : checkpoints.values()) {
+            checkpoint.reload();
+        }
     }
 
 }

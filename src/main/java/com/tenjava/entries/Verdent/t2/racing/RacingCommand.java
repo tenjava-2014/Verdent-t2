@@ -42,7 +42,7 @@ public class RacingCommand {
         } else if (subComm.equalsIgnoreCase("arena")) {
             arenaSubComm(player, args);
         } else {
-            player.sendMessage(ChatColor.RED + "Your command was not correct. Type /recing for more information");
+            player.sendMessage(ChatColor.RED + "Your command was not correct. Type /racing for more information");
         }
     }
 
@@ -128,6 +128,10 @@ public class RacingCommand {
             powerArenaCommand(player, args);
         } else if (comm.equalsIgnoreCase("spawn")) {
             spawnArenaCommand(player, args);
+        } else if (comm.equalsIgnoreCase("checkpoint")) {
+            checkpointArenaCommand(player, args);
+        } else {
+            player.sendMessage(ChatColor.RED + "Your command was not correct. Type /racing arena for more information");
         }
     }
 
@@ -144,6 +148,9 @@ public class RacingCommand {
             return;
         } else if (RacingManager.getInstance().containsSpawnEnabled(player.getUniqueId())) {
             player.sendMessage(ChatColor.RED + "Turn of spawn creating first!");
+            return;
+        } else if (RacingManager.getInstance().containsCheckpointEnabled(player.getUniqueId())) {
+            player.sendMessage(ChatColor.RED + "You have to turn off checkpoint creating first!");
             return;
         }
         String arenaName = args[2];
@@ -221,6 +228,9 @@ public class RacingCommand {
         } else if (rm.containsSpawnEnabled(uuid)) {
             player.sendMessage(ChatColor.RED + "You have to turn off spawn creating first!");
             return;
+        } else if (rm.containsCheckpointEnabled(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have to turn off checkpoint creating first!");
+            return;
         }
         String arenaName = args[2];
         String operator = args[3];
@@ -253,6 +263,9 @@ public class RacingCommand {
         } else if (rm.containsPowerEnabled(uuid)) {
             player.sendMessage(ChatColor.RED + "You have to turn off power up creating first!");
             return;
+        } else if (rm.containsCheckpointEnabled(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have to turn off checkpoint creating first!");
+            return;
         }
         String arenaName = args[2];
         String operator = args[3];
@@ -267,6 +280,41 @@ public class RacingCommand {
         } else if (operator.equalsIgnoreCase("off")) {
             rm.removeSpawnEnabled(uuid);
             player.sendMessage(ChatColor.GREEN + "Spawn creating has been canceled");
+        } else {
+            player.sendMessage(ChatColor.RED + "Only on/off allowed");
+        }
+    }
+
+    private void checkpointArenaCommand(Player player, String[] args) {
+        UUID uuid = player.getUniqueId();
+        RacingManager rm = RacingManager.getInstance();
+        if (args.length != 4) {
+            player.sendMessage(ChatColor.RED + "Usage:");
+            player.sendMessage(ChatColor.RED + "/racing arena spawn <arenaName> on/off - activates creating of new spawns");
+            return;
+        } else if (rm.containsArenaName(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have pending arena creating!");
+            return;
+        } else if (rm.containsPowerEnabled(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have to turn off power up creating first!");
+            return;
+        } else if (rm.containsSpawnEnabled(uuid)) {
+            player.sendMessage(ChatColor.RED + "You have to turn off spawn creating first!");
+            return;
+        }
+        String arenaName = args[2];
+        String operator = args[3];
+        Arena arena = rm.getArena(arenaName);
+        if (arena == null) {
+            player.sendMessage(ChatColor.RED + "There is no arena of this name: " + arenaName);
+            return;
+        }
+        if (operator.equalsIgnoreCase("on")) {
+            rm.addSpawnEnabled(uuid, arenaName);
+            player.sendMessage(ChatColor.GREEN + "Checkpoint creating has been enabled for arena: " + arenaName);
+        } else if (operator.equalsIgnoreCase("off")) {
+            rm.removeSpawnEnabled(uuid);
+            player.sendMessage(ChatColor.GREEN + "Checkpoint creating has been canceled");
         } else {
             player.sendMessage(ChatColor.RED + "Only on/off allowed");
         }

@@ -57,6 +57,10 @@ public class Arena {
         return null;
     }
 
+    public RacingLap getRacingLap(int number) {
+        return laps.get(number);
+    }
+
     public RacingLap getNextLap(RacingLap lap) {
         int lapNumber = lap.getLapNumber();
         return getNextLap(lapNumber);
@@ -92,7 +96,7 @@ public class Arena {
     public boolean addJockey(Jockey jockey) {
         Player player = jockey.getPlayer();
         String msg = spawns.givePlayerSpawn(player);
-        if (msg.equalsIgnoreCase("")) {
+        if (!msg.equalsIgnoreCase("")) {
             player.sendMessage(ChatColor.RED + msg);
             return false;
         }
@@ -181,7 +185,11 @@ public class Arena {
     }
 
     private void giveFirstCheckpoint(Jockey jockey) {
-        Checkpoint checkpoint = laps.get(1).getNextCheckpoint(0);
+        RacingLap lap = laps.get(0);
+        if (lap == null) {
+            throw new IllegalStateException("There is no RacingLap created!");
+        }
+        Checkpoint checkpoint = lap.getNextCheckpoint(-1);
         if (checkpoint == null) {
             throw new IllegalStateException("There is no Checkpoint created!");
         }

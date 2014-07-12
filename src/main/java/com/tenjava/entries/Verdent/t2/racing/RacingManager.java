@@ -28,6 +28,9 @@ public class RacingManager {
     private final HashMap<UUID, Location> arenaLocation2 = new HashMap<UUID, Location>();
     private final HashMap<UUID, String> powerEnabled = new HashMap<UUID, String>();
     private final HashMap<UUID, String> spawnEnabled = new HashMap<UUID, String>();
+    private final HashMap<UUID, String> checkpointEnabled = new HashMap<UUID, String>();
+    private final HashMap<UUID, Location> checkpointLocation1 = new HashMap<UUID, Location>();
+    private final HashMap<UUID, Location> checkpointLocation2 = new HashMap<UUID, Location>();
 
     private RacingManager() {
     }
@@ -131,6 +134,7 @@ public class RacingManager {
     }
 
     public void addArenaLocation1(UUID uuid, Location loc) {
+        arenaLocation1.remove(uuid);
         arenaLocation1.put(uuid, loc);
     }
 
@@ -143,6 +147,7 @@ public class RacingManager {
     }
 
     public void addArenaLocation2(UUID uuid, Location loc) {
+        arenaLocation2.remove(uuid);
         arenaLocation2.put(uuid, loc);
     }
 
@@ -186,6 +191,49 @@ public class RacingManager {
 
     public String getSpawnEnabled(UUID uuid) {
         return spawnEnabled.get(uuid);
+    }
+
+    public void addCheckpointEnabled(UUID uuid, String name) {
+        checkpointEnabled.remove(uuid);
+        checkpointEnabled.put(uuid, name);
+    }
+
+    public boolean containsCheckpointEnabled(UUID uuid) {
+        return checkpointEnabled.containsKey(uuid);
+    }
+
+    public String removeCheckpointEnabled(UUID uuid) {
+        return checkpointEnabled.remove(uuid);
+    }
+
+    public String getCheckpointEnabled(UUID uuid) {
+        return checkpointEnabled.get(uuid);
+    }
+
+    public void addCheckpointLocation1(UUID uuid, Location loc) {
+        checkpointLocation1.remove(uuid);
+        checkpointLocation1.put(uuid, loc);
+    }
+
+    public boolean containsCheckpointLocation1(UUID uuid) {
+        return checkpointLocation1.containsKey(uuid);
+    }
+
+    public Location removeCheckpointLocation1(UUID uuid) {
+        return checkpointLocation1.remove(uuid);
+    }
+
+    public void addCheckpointLocation2(UUID uuid, Location loc) {
+        checkpointLocation2.remove(uuid);
+        checkpointLocation2.put(uuid, loc);
+    }
+
+    public boolean containsCheckpointLocation2(UUID uuid) {
+        return checkpointLocation2.containsKey(uuid);
+    }
+
+    public Location removeCheckpointLocation2(UUID uuid) {
+        return checkpointLocation2.remove(uuid);
     }
 
 }
