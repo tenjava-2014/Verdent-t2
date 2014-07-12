@@ -5,8 +5,10 @@
  */
 package com.tenjava.entries.Verdent.t2.listeners;
 
+import com.tenjava.entries.Verdent.t2.boosts.IBoost;
 import com.tenjava.entries.Verdent.t2.entity.Jockey;
 import com.tenjava.entries.Verdent.t2.entity.PowerUp;
+import com.tenjava.entries.Verdent.t2.racing.BoostManager;
 import com.tenjava.entries.Verdent.t2.racing.RacingManager;
 import com.tenjava.entries.Verdent.t2.utils.EntitySpawnManager;
 import com.tenjava.entries.Verdent.t2.utils.FireworkManager;
@@ -20,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
@@ -52,10 +55,17 @@ public class JockeyListener implements Listener {
         PowerUp powerUp = RacingManager.getInstance().getPowerUp(loc);
         if (powerUp != null) {
             powerUp.pickUp();
-            /*Jockey jockey = RacingManager.getInstance().getJockey(player.getUniqueId());
-            FireworkManager.playRandomFirework(loc.add(0, 1, 0), FireworkEffect.Type.BALL, jockey.getColor());*/
-            player.sendMessage("You have just picked up an power up");
+            IBoost boost = BoostManager.getInstance().getRandomBoost();
+            Jockey jockey = RacingManager.getInstance().getJockey(player.getUniqueId());
+            jockey.giveBoost(boost);
+            FireworkManager.playStrictFirework(loc.add(0, 1, 0), FireworkEffect.Type.BALL, jockey.getColor());
+            player.sendMessage("You have just picked up: " + boost.getName());
         }
+
+    }
+
+    @EventHandler
+    public void onPlayerLogin(PlayerLoginEvent event) {
 
     }
 

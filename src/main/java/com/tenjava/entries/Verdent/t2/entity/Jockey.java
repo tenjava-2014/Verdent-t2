@@ -5,6 +5,7 @@
  */
 package com.tenjava.entries.Verdent.t2.entity;
 
+import com.tenjava.entries.Verdent.t2.boosts.IBoost;
 import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -58,6 +59,10 @@ public class Jockey {
 
     public UUID getPlayerUUID() {
         return player.getUniqueId();
+    }
+
+    public void giveBoost(IBoost boost) {
+        boost.activate(this);
     }
 
 }

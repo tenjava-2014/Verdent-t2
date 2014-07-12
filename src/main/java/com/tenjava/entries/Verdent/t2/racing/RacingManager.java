@@ -9,11 +9,14 @@ import com.tenjava.entries.Verdent.t2.entity.Arena;
 import com.tenjava.entries.Verdent.t2.entity.Checkpoint;
 import com.tenjava.entries.Verdent.t2.entity.Jockey;
 import com.tenjava.entries.Verdent.t2.entity.PowerUp;
+import com.tenjava.entries.Verdent.t2.utils.HorseManager;
 import java.util.HashMap;
 import java.util.UUID;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -25,6 +28,7 @@ public class RacingManager {
     private final HashMap<UUID, PowerUp> powerUps = new HashMap<UUID, PowerUp>();
     private final HashMap<UUID, Horse> horses = new HashMap<UUID, Horse>();
     private final HashMap<UUID, Jockey> jockeys = new HashMap<UUID, Jockey>();
+    private final HorseManager hm = new HorseManager();
 
     private RacingManager() {
     }
@@ -75,8 +79,27 @@ public class RacingManager {
         return this.horses.get(uuid);
     }
 
+    public void removeAllHorses() {
+        for (Horse horse : this.horses.values()) {
+            horse.remove();
+        }
+    }
+
     public Jockey getJockey(UUID uuid) {
         return this.jockeys.get(uuid);
+    }
+
+    public void addJockey(Player player) {
+        Horse horse = this.hm.spawnHorse(player.getLocation(), "", true, player, false);
+        this.hm.setHorseSpeed(horse);
+        horse.setPassenger(player);
+        Jockey jockey = new Jockey(player, Color.BLUE, horse);
+        addJockey(jockey);
+    }
+
+    public void addJockey(Jockey jockey) {
+        horses.put(jockey.getHorse().getUniqueId(), jockey.getHorse());
+        jockeys.put(jockey.getPlayerUUID(), jockey);
     }
 
     public boolean setNextCheckpoint(UUID uuid) {

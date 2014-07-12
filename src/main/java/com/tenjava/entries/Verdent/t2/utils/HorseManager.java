@@ -81,11 +81,16 @@ public class HorseManager extends EntitySpawnManager {
         return horse;
     }
 
-    public void setHorseSpeed(Horse horse) {
+    public synchronized double getHorseSpeed(Horse horse) {
+        AttributeInstance attributes = ((EntityInsentient) ((CraftLivingEntity) horse).getHandle()).getAttributeInstance(GenericAttributes.d);
+        return attributes.getValue();
+    }
+
+    public synchronized void setHorseSpeed(Horse horse) {
         setHorseSpeed(horse, NORMAL_SPEED);
     }
 
-    public void setHorseSpeed(Horse horse, double speed) {
+    public synchronized void setHorseSpeed(Horse horse, double speed) {
         AttributeInstance attributes = ((EntityInsentient) ((CraftLivingEntity) horse).getHandle()).getAttributeInstance(GenericAttributes.d);
         attributes.setValue(speed);
     }
