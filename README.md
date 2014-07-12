@@ -31,8 +31,11 @@ Usage
 1. Insert my plugin to plugin folder on you server
 2. Then follow commands after using "/racing" commands
 3. You need to setup arena and spawn points. 
-4. There is also possible to set up Power-ups
-5. I didnt have enough time to create arena saving but basicly the main structure of my plugin works.
+4. There is also possible to set up Power-ups for you horse
+5. The main reason for this plugin is to be able to create horse racings with boosts and checkpoints
+6. I didnt have enough time to create arena saving but basicly the main structure of my plugin works.
+
+I am sorry for my english. But when I am in stress it's worse and worse :-)
 
 <!-- Hi, Verdent! This is the default README for every ten.java submission. -->
 <!-- We encourage you to edit this README with some information about your submission – keep in mind you'll be scored on documentation! -->
